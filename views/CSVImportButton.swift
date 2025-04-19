@@ -2,17 +2,29 @@
 //  CSVImportButton.swift
 //  ProcessMan
 //
-//  Created by Radim  Chlad on 16.04.2025.
+//  Created by Radim Chlad on 16.04.2025.
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct CSVImportButton: View {
+    @ObservedObject var viewModel: CSVViewModel
+    @State private var isPresented: Bool = false
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Button {
+            isPresented.toggle()
+        } label: {
+            Label("Import CSV", systemImage:
+                    "square.and.arrow.down")
+        }
+        .fileImporter(isPresented: $isPresented,
+                      allowedContentTypes: [UTType.commaSeparatedText]) { result in
+            viewModel.handleFileImport(for: result)
+        }
     }
 }
 
 #Preview {
-    CSVImportButton()
+    CSVImportButton(viewModel: CSVViewModel())
 }

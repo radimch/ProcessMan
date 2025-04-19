@@ -2,20 +2,20 @@
 //  ContentView.swift
 //  ProcessMan
 //
-//  Created by Radim  Chlad on 16.04.2025.
+//  Created by Radim Chlad on 16.04.2025.
 //
 
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject var viewModel = CSVViewModel()
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+      CSVTableView(viewModel: viewModel)
+        .toolbar {
+            ProcessGetButton(viewModel: viewModel)
+            CSVExportButton(viewModel: viewModel)
+            CSVImportButton(viewModel: viewModel)
         }
-        .padding()
     }
 }
 
