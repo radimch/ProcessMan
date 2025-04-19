@@ -38,11 +38,33 @@ struct CSVTableView: View {
         }
     }
     
-    var body: some View {
+    var body: some View {        
         NavigationStack {
-            Table(of: CSVRow.self, selection: $selectedRowSet,
-                  columnCustomization: $viewModel.tableCustomization) {
-                TableColumnForEach(viewModel.headers) { header in
+            HStack {
+                ForEach(viewModel.headers.indices, id: \.self) { columnIndex in
+                    Button(action: {
+                        if sortColumnIndex == columnIndex {
+                            sortAscending.toggle()
+                        } else {
+                            sortColumnIndex = columnIndex
+                            sortAscending = true
+                        }
+                    }) {
+                        HStack(spacing: 4) {
+                            Text(viewModel.headers[columnIndex].name)
+                                .bold()
+                            if sortColumnIndex == columnIndex {
+                                Text(sortAscending ? "↑" : "↓")
+                                    .font(.caption)
+                            }
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                }
+            }
+           Table(of: CSVRow.self, selection: $selectedRowSet,
+                  columnCustomization: $viewModel.tableCustomization)  {
+                 TableColumnForEach(viewModel.headers) { header in
                     TableColumn(header.name) { row in
                         TextField("Cell value", text: viewModel.cellBinding(for: row, header: header))
                     }
