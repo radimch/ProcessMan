@@ -11,12 +11,13 @@ struct CSVTableView: View {
     @ObservedObject var viewModel: CSVViewModel
     @State private var selectedRowSet: Set<CSVRow.ID> = []
     
+    @State private var searchColumnIndex = 6
     @State private var searchText: String = ""
     var filteredRows: [CSVRow] {
         if searchText.count < 2 {
             sortedRows
         } else {
-            sortedRows.filter { $0.cells[4].content.lowercased().contains(searchText.lowercased()) }
+            sortedRows.filter { $0.cells[searchColumnIndex].content.lowercased().contains(searchText.lowercased()) }
         }
     }
     @State private var sortColumnIndex: Int? = 4
@@ -38,7 +39,20 @@ struct CSVTableView: View {
         }
     }
     
-    var body: some View {        
+    var body: some View {
+        Form {
+            Spacer().frame(height: 5)
+                HStack {
+                    Spacer().frame(width: 5)
+                    TextField("Date :", text: .constant(viewModel.date)).frame(width: 210).multilineTextAlignment(.trailing)
+                    TextField("Total processes :", text: .constant(String(viewModel.totalProcesses))).frame(width: 150).multilineTextAlignment(.trailing)
+                    TextField("uname -a: ", text:$viewModel.uname).onAppear {
+                        viewModel.getProcesses()
+                    }
+                    Spacer().frame(width: 5)
+                }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
         NavigationStack {
             HStack {
                 ForEach(viewModel.headers.indices, id: \.self) { columnIndex in

@@ -19,9 +19,12 @@ struct CSVExportButton: View {
         }
         .disabled(viewModel.content.isEmpty)
         .fileExporter(isPresented: $isPresented, document: viewModel,
-                      contentType: UTType.commaSeparatedText) { result in
+                      contentType: UTType.commaSeparatedText,
+                      defaultFilename:
+                        viewModel.date) { result in
             print("result: \(result)")
         }
+        .help("Export current data as CSV file")
     }
 }
 

@@ -9,6 +9,10 @@ import SwiftUI
 import SwiftCSV
 
 class CSVViewModel: ObservableObject {
+    @Published var date: String = ""
+    @Published var uname: String = ""
+    @Published var totalProcesses: Int = 0
+    
     @Published var content: String = ""
     @Published var headers: [CSVHeader] = []
     @Published var rows: [CSVRow] = []
@@ -39,6 +43,8 @@ class CSVViewModel: ObservableObject {
         do {
             let content = try String(contentsOf: url, encoding: .utf8)
             self.content = content
+            self.uname = "unknown"
+            self.date = "unknown"
             parseCSV(content: content)
         } catch {
             print(error)
@@ -51,6 +57,7 @@ class CSVViewModel: ObservableObject {
             let data = try EnumeratedCSV(string: content, loadColumns: false)
             self.headers = CSVHeader.createHeaders(data: data.header)
             self.rows = data.rows.map({ CSVRow(cells: $0.map({CSVCell(content: $0)}))})
+            self.totalProcesses = rows.count
         } catch {
             print(error)
         }
@@ -74,6 +81,33 @@ class CSVViewModel: ObservableObject {
                 self.rows[rowIndex].cells[header.columnIndex].content = newValue
             }
         }
+    }
+    
+    func getProcesses() {
+        let content = shell("""
+                 ps aux | awk 'NR >= 1 {
+                     for (i = 1; i < 5; i++) {
+                         printf "%s%s", $i, ";"
+                     }
+                     for (i = 9; i < 11; i++) {
+                         printf "%s%s", $i, ";"
+                     }
+                     for (i = 11; i <= NF; i++) {
+                         printf "%s%s", $i, (i==NF ? ORS : OFS)
+                     }
+                 }' | tr -d '"'
+            """)
+        self.content = content
+        self.parseCSV(content: content)
+        let date = shell("""
+            date "+%Y%m%d-%H%M%S-%Z" | tr -d "\n"
+        """)
+        self.date = date
+        
+        let uname = shell("""
+            uname -a
+        """)
+        self.uname = uname
     }
     
     static var preview: CSVViewModel {

@@ -22,6 +22,7 @@ struct CSVImportButton: View {
                       allowedContentTypes: [UTType.commaSeparatedText]) { result in
             viewModel.handleFileImport(for: result)
         }
+        .help("Import data from saved CSV file.")
     }
 }
 
