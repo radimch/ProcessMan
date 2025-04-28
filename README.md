@@ -19,3 +19,6 @@ Prepare a CLI tool to create a detailed report of running processes on a MacBook
 - Implement a simple Continuous Integration (CI) pipeline (using GitHub Actions, GitLab CI, or similar) that automatically checks the tool's basic functionality upon code changes.
 
 ---
+Download and run:
+
+[ProcessMan20250425.app.zip](https://github.com/user-attachments/files/19943773/ProcessMan20250425.app.zip)
