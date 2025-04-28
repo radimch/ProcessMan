@@ -22,3 +22,8 @@ Prepare a CLI tool to create a detailed report of running processes on a MacBook
 Download and run:
 
 [ProcessMan20250425.app.zip](https://github.com/user-attachments/files/19943773/ProcessMan20250425.app.zip)
+
+
+Howto video:
+
+![ProcessMacGUI-640](https://github.com/user-attachments/assets/301d8aae-eb0c-4e72-be35-2cc78c43e48b)
